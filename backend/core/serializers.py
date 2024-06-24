@@ -86,7 +86,11 @@ class RiskAcceptanceWriteSerializer(BaseModelSerializer):
     # approvers_id = []
     # try:
     #     for candidate in User.objects.all():
-    #         if RoleAssignment.has_permission(candidate, 'approve_riskacceptance'):
+    #         if RoleAssignment.is_access_allowed(
+    #             user=candidate,
+    #             perm=Permission.objects.get(codename="approve_riskacceptance"),
+    #             folder=Folder.get_root_folder()
+    #             ):
     #             approvers_id.append(candidate.id)
     # except:
     #     pass
