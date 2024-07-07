@@ -1792,6 +1792,19 @@ class ComplianceAssessment(Assessment):
             )
         return requirements_status_count
 
+    def get_requirements_result_count(self):
+        requirements_result_count = []
+        for res in RequirementAssessment.Results:
+            requirements_result_count.append(
+                (
+                    RequirementAssessment.objects.filter(result=res)
+                    .filter(compliance_assessment=self)
+                    .count(),
+                    res,
+                )
+            )
+        return requirements_result_count
+
     def get_measures_status_count(self):
         measures_status_count = []
         measures_list = []
@@ -2090,6 +2103,14 @@ class RequirementAssessment(AbstractBaseModel, FolderMixin, ETADueDateMixin):
     class Meta:
         verbose_name = _("Requirement assessment")
         verbose_name_plural = _("Requirement assessments")
+
+    def save(self, *args, **kwargs):
+        # create historical data for the compliance assessment
+        toto = self.compliance_assessment.get_requirements_status_count()
+        tata = self.compliance_assessment.get_requirements_result_count()
+        print(toto)
+        print(tata)
+        super().save(*args, **kwargs)
 
 
 ########################### RiskAcesptance is a domain object relying on secondary objects #########################
