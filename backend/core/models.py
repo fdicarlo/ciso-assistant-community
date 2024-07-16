@@ -24,6 +24,9 @@ from datetime import date, datetime
 from typing import Union, Dict, Set, List, Tuple, Type, Self
 from django.utils.html import format_html
 
+from auditlog.models import AuditlogHistoryField
+from auditlog.registry import auditlog
+
 from structlog import get_logger
 
 logger = get_logger(__name__)
@@ -2256,6 +2259,7 @@ class RequirementAssessment(AbstractBaseModel, FolderMixin, ETADueDateMixin):
         default=dict,
         verbose_name=_("Mapping inference"),
     )
+    history = AuditlogHistoryField()
 
     def __str__(self) -> str:
         return self.requirement.display_short
@@ -2381,3 +2385,6 @@ class RiskAcceptance(NameDescriptionMixin, FolderMixin, PublishInRootFolderMixin
         elif state == "revoked":
             self.revoked_at = datetime.now()
         self.save()
+
+
+auditlog.register(RequirementAssessment, m2m_fields={"applied_controls", "evidences"})

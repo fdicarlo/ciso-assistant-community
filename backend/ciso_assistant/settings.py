@@ -137,6 +137,7 @@ INSTALLED_APPS = [
     "allauth.headless",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.saml",
+    "auditlog",
 ]
 
 MIDDLEWARE = [
@@ -150,6 +151,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_structlog.middlewares.RequestMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "auditlog.middleware.AuditlogMiddleware",
 ]
 
 ROOT_URLCONF = "ciso_assistant.urls"
@@ -371,3 +373,5 @@ SOCIALACCOUNT_PROVIDERS = {
         "VERIFIED_EMAIL": True,
     },
 }
+
+AUDITLOG_INCLUDE_ALL_MODELS = True
